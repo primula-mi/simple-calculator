@@ -1,11 +1,28 @@
 <script setup>
+import { ref } from "vue";
 const props = defineProps({
   text: String,
 });
+const emits = defineEmits(["clickBth"]);
+let classClick = ref(false);
+const clickBth = (btnText) => {
+  emits("clickBth", btnText);
+  setClickStyle();
+  setTimeout(() => {
+    setClickStyle();
+  }, 100);
+};
+const setClickStyle = () => {
+  classClick.value = !classClick.value;
+};
 </script>
 
 <template>
-  <div class="calculator-btn" @click="$emit('clickBth', props.text)">
+  <div
+    class="calculator-btn"
+    :class="{ click: classClick }"
+    @click="clickBth(props.text)"
+  >
     <div class="calculator-btn-main">{{ props.text }}</div>
   </div>
 </template>
@@ -58,5 +75,24 @@ const props = defineProps({
 }
 .calculator-btn--pink::after {
   background: #d6b2bc;
+}
+.click .calculator-btn-main {
+  position: absolute;
+  top: 6px;
+  left: -4px;
+  background: #cde2df;
+}
+.click::after {
+  height: 105%;
+  width: 103%;
+  top: 3px;
+  right: 1px;
+  background: #7a948e;
+}
+.click.calculator-btn--pink .calculator-btn-main {
+  background: #ecccd4;
+}
+.click.calculator-btn--pink::after {
+  background: #866c73;
 }
 </style>

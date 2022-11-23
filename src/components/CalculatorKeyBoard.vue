@@ -35,7 +35,7 @@ const equal = () => {
   firstNum = output.value;
   secondNum = "";
   operator = "";
-}
+};
 const plus = () => {
   return parseFloat(firstNum) + parseFloat(secondNum);
 };
