@@ -6,5 +6,4 @@ import CalculatorFrame from "@/components/CalculatorFrame.vue";
   <CalculatorFrame />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
