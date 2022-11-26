@@ -4,18 +4,60 @@ import CalculatorKeyBoard from "@/components/CalculatorKeyBoard.vue";
 import { ref } from "vue";
 const textTwo = ref("");
 const text = ref("");
+const fontSize = ref("");
+const fontSizeSmall = ref("");
 function outputSmall(output) {
+  outputSmallFontSize(output);
   text.value = output;
 }
 function outputMain(output) {
-  textTwo.value = output;
+  outputMainFontSize(output);
+  if (output !== "") {
+    textTwo.value = setSpase(output);
+  } else {
+    textTwo.value = output;
+  }
 }
+const outputMainFontSize = (output) => {
+  if (output.length > 14) {
+    fontSize.value = "20";
+  } else if (output.length > 10) {
+    fontSize.value = "25";
+  } else if (output.length > 8) {
+    fontSize.value = "30";
+  } else {
+    fontSize.value = "40";
+  }
+};
+const outputSmallFontSize = (output) => {
+  if (output.length > 14) {
+    fontSize.value = "20";
+  } else if (output.length > 10) {
+    fontSize.value = "25";
+  } else if (output.length > 8) {
+    fontSize.value = "30";
+  } else {
+    fontSize.value = "40";
+  }
+};
+
+const setSpase = (str) => {
+  if (!str.toString().includes(".")) {
+    return new Intl.NumberFormat("ru-RU").format(str);
+  }
+  return str;
+};
 </script>
 
 <template>
   <div class="calculator-frame">
     <div class="calculator-frame-main">
-      <CalculatorScreen :text="text" :textTwo="textTwo" />
+      <CalculatorScreen
+        :text="text"
+        :textTwo="textTwo"
+        :fontSize="fontSize"
+        :fontSizeSmall="fontSizeSmall"
+      />
       <CalculatorKeyBoard @outputMain="outputMain" @outputSmall="outputSmall" />
     </div>
   </div>

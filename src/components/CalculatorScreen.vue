@@ -1,22 +1,38 @@
 <script setup>
-const props = defineProps(["smalltext", "textTwo", "text"]);
+const props = defineProps([
+  "smalltext",
+  "textTwo",
+  "text",
+  "fontSize",
+  "fontSizeSmall",
+]);
 </script>
 
 <template>
   <div class="calculator-screen">
     <div class="calculator-screen-main">
-      <div class="outputScreen">{{ props.text }}</div>
-      <div class="outputScreen outputScreen--main">{{ props.textTwo }}</div>
+      <div class="outputScreen" :style="{ fontSize: fontSizeSmall + 'px' }">
+        {{ props.text }}
+      </div>
+      <div
+        class="outputScreen outputScreen--main"
+        :style="{ fontSize: fontSize + 'px' }"
+      >
+        {{ props.textTwo }}
+      </div>
     </div>
   </div>
 </template>
 <style scoped>
-
 .outputScreen {
   height: 50%;
   text-align: right;
   font-size: 20px;
-  padding: 0 20px;
+  padding: 0 10px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  overflow: hidden;
 }
 .outputScreen--main {
   font-size: 30px;
