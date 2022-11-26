@@ -10,7 +10,7 @@ const clickBth = (btnText) => {
   setClickStyle();
   setTimeout(() => {
     setClickStyle();
-  }, 100);
+  }, 70);
 };
 const setClickStyle = () => {
   classClick.value = !classClick.value;

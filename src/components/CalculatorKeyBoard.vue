@@ -4,11 +4,12 @@ import { ref } from "vue";
 const output = ref("");
 const emit = defineEmits(["outputMain", "outputSmall"]);
 const numbers = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+let fixedNum = 0;
 let firstNum = "";
 let secondNum = "";
+let answer = "";
 let operator = "";
 const selectAction = () => {
-  console.log(operator);
   switch (operator) {
     case "+":
       output.value = plus();
@@ -26,15 +27,15 @@ const selectAction = () => {
       alert("Default case");
   }
   equal();
-  // output.value = "";
-  // console.log(firstNum, " ", operator, " ", secondNum, " = ", output.value);
 };
 const equal = () => {
+  fixedNum = getFixedNum();
   emit("outputSmall", `${firstNum} ${operator} ${secondNum} = `);
-  emit("outputMain", output.value);
+  emit("outputMain", output.value.toFixed(fixedNum));
   firstNum = output.value;
   secondNum = "";
   operator = "";
+  answer = output.value;
 };
 const plus = () => {
   return parseFloat(firstNum) + parseFloat(secondNum);
@@ -71,6 +72,7 @@ const clear = () => {
   firstNum = "";
   secondNum = "";
   operator = "";
+  answer = "";
   output.value = "";
   emit("outputSmall", output.value);
   emit("outputMain", output.value);
@@ -82,13 +84,43 @@ const isNum = (event) => {
   return false;
 };
 const enterNum = (event) => {
-  if (operator === "") {
-    firstNum += event;
-  } else {
-    secondNum += event;
+  if (output.value.length < 16) {
+    output.value += event;
+    if (operator === "") {
+      firstNum += event;
+    } else if (answer === "" && output.value === "") {
+      secondNum = event;
+    } else {
+      secondNum = "";
+      secondNum += output.value;
+    }
+    emit("outputMain", output.value);
   }
-  output.value += event;
-  emit("outputMain", output.value);
+};
+const getFixedNum = () => {
+  let fix = 0;
+  if (output.value.toString().includes(".")) {
+    fixedNum = output.value
+      .toString()
+      .substring(output.value.toString().indexOf(".") + 1).length;
+  }
+  if (firstNum.toString().includes(".")) {
+    fix = firstNum
+      .toString()
+      .substring(firstNum.toString().indexOf(".") + 1).length;
+    if (fixedNum < fix) {
+      fixedNum = fix;
+    }
+  }
+  if (secondNum.toString().includes(".")) {
+    fix = secondNum
+      .toString()
+      .substring(secondNum.toString().indexOf(".") + 1).length;
+    if (fixedNum < fix) {
+      fixedNum = fix;
+    }
+  }
+  return fixedNum;
 };
 
 function clickBth(event) {
@@ -105,9 +137,14 @@ function clickBth(event) {
       selectAction();
     } else {
       operator = event;
-      output.value += event;
+      if (answer !== "") {
+        secondNum = firstNum;
+      }
+      answer = "";
+      output.value = `${firstNum} ${event} `;
+      fixedNum = getFixedNum();
       emit("outputSmall", output.value);
-      emit("outputMain", firstNum);
+      emit("outputMain", firstNum.toString());
       output.value = "";
     }
   }
@@ -176,5 +213,6 @@ function clickBth(event) {
   gap: 10px;
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(5, 1fr);
+  user-select: none;
 }
 </style>
